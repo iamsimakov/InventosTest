@@ -1,32 +1,38 @@
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.Arrays;
 
-/**
- * Created by Alex on 13.12.2015.
- */
+
 public class Kamni {
     public static void main(String[] args) throws Exception {
-        BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-        int count = Integer.parseInt(reader.readLine());
+        StreamTokenizer in = new StreamTokenizer(new BufferedReader(new InputStreamReader(System.in)));
+        in.nextToken();
+        int count = (int)in.nval;
         int[] mas = new int[count];
-        if (count >= 1 && count <= 20){
-            int j = 0;
-            for (String str : reader.readLine().split(" ")){
-                mas[j] = Integer.parseInt(str);
-                j++;
-            }
-            Arrays.sort(mas);
-            int sum = 0;
-            for (int i : mas){
-                sum += i;
-            }
-            double seredina = sum / 2.0d;
-            System.out.println(seredina);
-//            for (int i = 0; i < mas.length; i++){
-//
-//            }
+        for (int j=0; j < count; j++){
+            in.nextToken();
+            mas[j] = (int)in.nval;
         }
+        Arrays.sort(mas);
+        int sum = 0;
+        for (int i : mas) {
+            sum += i;
+        }
+        int saveDiff = sum;
+        int saveHeapSum = 0;
+        for (int i = 0; i < mas.length; i++) {
+            int heap1Sum = mas[i];
+            for (int k = 0; k < mas.length; k++) {
+                int diff = Math.abs(heap1Sum - (sum - heap1Sum));
+                if (diff < saveDiff) {
+                    saveDiff = diff;
+                    saveHeapSum = heap1Sum;
+                }
+                if (i == k) continue;
+                heap1Sum += mas[k];
+            }
+        }
+        System.out.println(saveDiff);
+        System.out.println(saveHeapSum);
     }
 
 }
